@@ -48,6 +48,8 @@ wc --help pour les autres astuces
 
 dossier TAIR = format bed = définit les régions du génome (numéro chromosome, start région, stop région)
 
+fastqc lancer
+
 # Traitement des données
 
 ## Importation des données
