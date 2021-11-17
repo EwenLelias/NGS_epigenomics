@@ -12,7 +12,14 @@ outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation S
 et HMMRATAC spécialisé pour la taqSeq.
 
 vendredi présentation sur la TaqSeq BIBLIO
+présenter le projet, ce qu'on à fait et ce qu'on va faire et tout ça de manière compréhensible
 
+taqseq single cell ==> casiment pas de signal par cellule ==> obligé de faire des groupes de cellules qui ont à peu près la même identité.
+
+taq ==> transposase qui vient couper des morcaux de minimum de 38pb à cause de l'encombrement stérique.
+tac-seq ==> avantage par rapport au RNA seq pour connaître quels gènes sont actifs.
+
+remarque : si 2 pique sur le GC mean ==> possibilité de contamination
 
 Le séquençage est en paire d'ends pour séquencer les deux bruns de l'ADN et être plus précis dans le séquençage.
 
@@ -25,6 +32,9 @@ Chaque caractère donne la qualité du nucléotide. Plus un nucléotide est de b
  #AAAAEEEEEE############################## #ligne qualité
 
 
+nucleosome 148 pb autour
+
+les facteurs de transcriptions peuvent aussi géner l'atac-seq ==> footprint qu'il faut recouper avec du chipseq contre le facteur de transcriptnio ou avec du RNAseq pour savoir quels zones sont constemment active et les différencier des zones inactives.
 
 fichier gtf
 AT = Arabidopsis Thaliana
