@@ -50,6 +50,41 @@ dossier TAIR = format bed = définit les régions du génome (numéro chromosome
 
 fastqc lancer
 
+Remarque:
+006 et 007 = stem cell
+372, 378 & 380 = racine antière
+Article = réplicats de racine antière
+
+
+duplicate read nombre = pas ouf si trop nombreux
+
+sequece quality tout au vert
+
+transposon =>  biai sur les 15 premières bases par rapport à la séquence reconnu pour couper
+
+%GC = 44 à 45
+ici on est autour de 48
+
+N content faible ==> toute la séquence est determinée
+
+si adapter content rouge il faut les supprimer avec un logiciel particulier, ici tout est au vert.
+
+haute complexité c'est bien car les reads ont des starting point différent et donc s'overlap et permet une meilleur roncstruction du génome
+
+
+
+
+trimming ==> enlève les séquences de mauvaises qualités, avec haut N content et avec du A tailing ou cen genre de chose
+
+les duplicats sont enlevés avec autre chose
+
+
+
+80% de mapping == bon allignement
+=> si inférieur comprendre pourquoi, rapport avec la teechnique ou contamination
+
+
+
 # Traitement des données
 
 ## Importation des données
