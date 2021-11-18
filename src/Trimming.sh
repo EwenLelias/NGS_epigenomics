@@ -13,7 +13,7 @@ Nextera=/softwares/Trimmomatic-0.39/adapters/NexteraPE-PE.fa
 #adaptater illumina
 
 
-for f in ~/mydatalocal/NGS_epigenomics/data/*1.fastq.gz
+for f in ~/mydatalocal/NGS_epigenomics/data/non_publi/*1.fastq.gz
 #on parcours les échantillons quand on se place dans Data
 # on ne doit pas mettre *.fastq parce que sinon ça parcours
 #deux fois les rads lors du trimming qui fait les deux bruns
@@ -33,7 +33,7 @@ do
 done
 
 
-for f in ~/mydatalocal/NGS_epigenomics/data/*1.fastq #on parcours les échantillons quand on se place dans Data
+for f in ~/mydatalocal/NGS_epigenomics/data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
 # on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
 
 do
