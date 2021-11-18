@@ -27,4 +27,3 @@ for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/*1_paired.*
   done
 
 
-
