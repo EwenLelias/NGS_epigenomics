@@ -9,64 +9,47 @@ trimmomatic=/softwares/Trimmomatic-0.39/trimmomatic-0.39.jar
 java -jar $trimmomatic
 #obliger de passer par java pour faire tourner la fonction
 
-
-for f in data/non_publi/*1.fastq.gz
-
-do
-	n=${f%%1.fastq.gz}
-	prefixe=${n/"data/non_publi/"/"processed_data/Trim/"}
-	echo $n
-	echo $prefixe
-	echo ${prefixe}2_unpaired.fastq.gz
-done
-
 Nextera=/softwares/Trimmomatic-0.39/adapters/NexteraPE-PE.fa
+#adaptater illumina
 
 
-for f in data/non_publi/*1.fastq.gz
+for f in ~/mydatalocal/NGS_epigenomics/data/*1.fastq.gz
 #on parcours les échantillons quand on se place dans Data
 # on ne doit pas mettre *.fastq parce que sinon ça parcours
 #deux fois les rads lors du trimming qui fait les deux bruns
 #complémentaires en même temps.
 
 do
-	n=${f%%1.fastq.gz} #pour le nouveau nom on garde tout ce
-	#qu'il y a avant le 1.
+	n=${f%%1.fastq.gz}
+	#pour le nouveau nom on garde tout ce qu'il y a avant le 1.
 	#echo $n
-	prefixe=${n/"data/non_publi"/"processed_data/Trim/"}
+	prefixe=${n/"data/non_publi"/"processed_data/Trim/trimmed"}
 	#change le préfixe qui servira à mettre dans le nouveau dossier
 	#echo $prefixe
 	java -jar $trimmomatic PE -threads 6 ${n}1.fastq.gz ${n}2.fastq.gz \
-	${prefixe}1_paired.fastq.gz ${prefixe}2_unpaired.fastq.gz \
-	${prefixe}1_reverse_paired.fastq.gz ${prefixe}1_reverse_unpaired.fastq.gz \
+	${prefixe}1_paired.fastq.gz ${prefixe}1_unpaired.fastq.gz \
+	${prefixe}2_paired.fastq.gz ${prefixe}2_unpaired.fastq.gz \
 	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
 done
 
-for f in data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
-# on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
 
-do
-	n=${f%%1.fastq}
-	prefixe=${n/"data/data_article/"/"processed_data/Trim/"}
-	echo $n
-	echo $prefixe
-	echo ${prefixe}2_unpaired.fastq
-done
-
-for f in data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
+for f in ~/mydatalocal/NGS_epigenomics/data/*1.fastq #on parcours les échantillons quand on se place dans Data
 # on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
 
 do
 	n=${f%%1.fastq} #pour le nouveau nom on garde tout ce qu'il y a avant le 1.
 	#echo $n
-	prefixe=${n/"data/data_article"/"processed_data/Trim/"} #change le préfixe qui servira à mettre dans le nouveau dossier
+	prefixe=${n/"data/data_article"/"processed_data/Trim/trimmed"} #change le préfixe qui servira à mettre dans le nouveau dossier
 	#echo $prefixe
 	java -jar $trimmomatic PE -threads 6 ${n}1.fastq ${n}2.fastq \
-	${prefixe}1_paired.fastq ${prefixe}2_unpaired.fastq \
-	${prefixe}1_reverse_paired.fastq ${prefixe}1_reverse_unpaired.fastq \
+	${prefixe}1_paired.fastq ${prefixe}1_unpaired.fastq \
+	${prefixe}2_paired.fastq ${prefixe}2_unpaired.fastq \
 	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
 done
 
+cd ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed
+
+fastqc *.fast*
 
 mv *fastqc.* ~/mydatalocal/NGS_epigenomics/processed_data/Trim/fastqc/
 

@@ -1,9 +1,7 @@
 
-cd ~/mydatalocal/NGS-epigenomics/data/data_article/
+cd ~/mydatalocal/NGS-epigenomics/data/
 
 fastqc SRR400047* # regarde la qualité des séquences d'articles
-
-cd ~/mydatalocal/NGS-epigenomics/data/non_publi/
 
 fastqc 20* #regarde la qualité des séquences non publiées
 
