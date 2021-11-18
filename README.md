@@ -78,6 +78,8 @@ trimming ==> enlève les séquences de mauvaises qualités, avec haut N content 
 
 les duplicats sont enlevés avec autre chose
 
+pour l'atac-seq ==> adaptater sont nextera
+
 
 
 80% de mapping == bon allignement
