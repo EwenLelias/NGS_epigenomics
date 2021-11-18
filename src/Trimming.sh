@@ -66,3 +66,14 @@ do
 	${prefixe}1_reverse_paired.fastq ${prefixe}1_reverse_unpaired.fastq \
 	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
 done
+
+
+mv *fastqc.* ~/mydatalocal/NGS_epigenomics/processed_data/Trim/fastqc/
+
+cd ~/mydatalocal/NGS_epigenomics/processed_data/Trim/fastqc/
+
+multiqc .
+
+mv multiqc* ~/mydatalocal/NGS_epigenomics/processed_data/Trim/multiqc/
+
+
