@@ -42,4 +42,27 @@ do
 	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
 done
 
+for f in data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
+# on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
 
+do
+	n=${f%%1.fastq}
+	prefixe=${n/"data/data_article/"/"processed_data/Trim/"}
+	echo $n
+	echo $prefixe
+	echo ${prefixe}2_unpaired.fastq
+done
+
+for f in data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
+# on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
+
+do
+	n=${f%%1.fastq} #pour le nouveau nom on garde tout ce qu'il y a avant le 1.
+	#echo $n
+	prefixe=${n/"data/data_article"/"processed_data/Trim/"} #change le préfixe qui servira à mettre dans le nouveau dossier
+	#echo $prefixe
+	java -jar $trimmomatic PE -threads 6 ${n}1.fastq ${n}2.fastq \
+	${prefixe}1_paired.fastq ${prefixe}2_unpaired.fastq \
+	${prefixe}1_reverse_paired.fastq ${prefixe}1_reverse_unpaired.fastq \
+	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
+done
