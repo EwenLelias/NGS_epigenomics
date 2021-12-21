@@ -19,6 +19,8 @@ for f in ~/mydatalocal/NGS_epigenomics/data/non_publi/*1.fastq.gz
 #deux fois les rads lors du trimming qui fait les deux bruns
 #complémentaires en même temps.
 
+#Remarque: on s'occupe ici des fichiers zippés (.gz)
+
 do
 	n=${f%%1.fastq.gz}
 	#pour le nouveau nom on garde tout ce qu'il y a avant le 1.
@@ -33,8 +35,12 @@ do
 done
 
 
-for f in ~/mydatalocal/NGS_epigenomics/data/data_article/*1.fastq #on parcours les échantillons quand on se place dans Data
-# on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les rads lors du trimming qui fait les deux bruns complémentaires en même temps.
+for f in ~/mydatalocal/NGS_epigenomics/data/data_article/*1.fastq
+#on parcours les échantillons quand on se place dans Data
+# on ne doit pas mettre *.fastq parce que sinon ça parcours deux fois les reads
+#lors du trimming qui fait les deux bruns complémentaires en même temps.
+
+#Remarque: on s'occupe ici des fichiers non zippés
 
 do
 	n=${f%%1.fastq} #pour le nouveau nom on garde tout ce qu'il y a avant le 1.
