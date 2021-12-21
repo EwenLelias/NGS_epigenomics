@@ -47,3 +47,21 @@ racine=2020_374_S4.corrected_peaks.broadPeak
 bedtools intersect -v -a ${outDIR}/$WOX5 -b ${outDIR}/$racine -wa > ${outDIR}/${WOX5}_${racine}_difference.txt
 
 
+#pour 006 quiescent/racine 374
+WOX5_genes=2019_006_S6_R.nearest.genes.txt
+racine_genes=2020_374_S4.corrected_.nearest.genes.txt
+
+#head $racine
+
+bedtools intersect -v -a ${outDIR}/${WOX5_genes} -b ${outDIR}/${racine_genes} -wa > ${outDIR}/${WOX5_genes}_${racine_genes}_difference.txt
+#v on regarde les gènes communs à a.
+
+#################################
+
+Unique_SC=${outDir}/2019_006_S6_R_peaks.broadPeak_2020_374_S4.corrected_peaks.broadPeak_difference.txt
+
+Genes=${Unique_SC}[, c(1)]
+
+
+
+

@@ -1,6 +1,15 @@
 # Contexte biologique
 
-Etudier comment est programmer la différenciation des cellules dans la racine et s'il y a un épigénome spécifique dans les cellules souches (centre quiescent) et regarder comment cet état il change au cour de la différenciation dans le temps et dans l'espace.
+La racine possède un pôle de quatre cellules quiescentes, le centre quiescent. Ces cellules souches ne se différencient pas et devraient posséder un épigénome différent du reste des cellules de la racine qui ont un programme de différenciation.
+
+L'étude s'intéresse à découvrir si les cellules souches possèdent un épigénome spécfique et à savoir si cet épigénome varie au cours de la différentiaiton dans le temps et dans l'espace racinaire.
+
+Il est très difficile d'étudier le centre quiescent puisqu'il n'est composé que de 3-4 cellules. Les premiers papiers de single-cell sur des végétaux sont très récents.
+
+L'extraction des noyaux cellulaires d'intérêts est réalisée grâce à la méthode [INTACT](https://pubmed.ncbi.nlm.nih.gov/21212783/). En particulier, concernant les cellules souches, 
+
+
+
 
 Grosse difficulté d'étudier le centre quiescent (cellule très rare, "-' cellules"). Les premières papier de single cell sur les végétaux sont très récents. L'alternative était d'extraire le populations de cellules qui exprimaient un marqueur, par exemple avec du FACS.
 Utilisation de la technique IMPACT ==> on fait exprimer à la plante une GFP sous contrôle d'un promoteur tissu spécifique du gène WOX5, seul promoteur qu'on connaît pour le ccentre quiescent. la GFP est enchassé dans l'enveloppe nucléaire. peptide biotine retient tous les GFP positifs, élution, on récupère les noyaux GFP+ puiis on séquence ici taqSeq.
