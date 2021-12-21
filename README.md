@@ -1,8 +1,11 @@
+REECRIRE AVEC LE HTML DE BIOSCIENCE
+
+
 # Contexte biologique
 
-La racine possède un pôle de quatre cellules quiescentes, le centre quiescent. Ces cellules souches ne se différencient pas et devraient posséder un épigénome différent du reste des cellules de la racine qui ont un programme de différenciation.
+La racine possède un pôle de deux à cinq cellules quiescentes, le centre quiescent. Ces cellules souches ne se différencient pas et devraient posséder un épigénome différent du reste des cellules de la racine qui ont un programme de différenciation.
 
-L'étude s'intéresse à découvrir si les cellules souches possèdent un épigénome spécfique et à savoir si cet épigénome varie au cours de la différentiaiton dans le temps et dans l'espace racinaire.
+L'étude s'intéresse à découvrir si les cellules souches possèdent un épigénome spécfique et à savoir si cet épigénome varie au cours de la différentiation dans le temps et dans l'espace racinaire. Notamment, l'intérêt est porté sur l'accessibilité des régions régulatrices.
 
 Il est très difficile d'étudier le centre quiescent puisqu'il n'est composé que de 3-4 cellules. Les premiers papiers de single-cell sur des végétaux sont très récents.
 
@@ -27,13 +30,12 @@ A l'issue du mapping avec l'ATAC-seq, on obtient un footprint du génome. Cette 
 
 Utilisation de l'outil wget pour importer les données fastq de séquençage, racines entières et centres quiescents, non publiées à partir du serveur.
 
-Utilisation de fastq-dump pour importer les données de séquençages racines entières à partir des SRA (Sequence Read Archive) données dans l'article *Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes*.
-
+Utilisation de fastq-dump pour importer les données de séquençages racines entières à partir des SRA (Sequence Read Archive) données dans l'article [Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](https://academic.oup.com/nar/article/45/6/e41/2605943).
 Les SRA sont données dans les liens suivants:
 - [SRX2000803](https://www.ncbi.nlm.nih.gov/sra?term=SRX2000803)
 - [SRX2000804](https://www.ncbi.nlm.nih.gov/sra?term=SRX2000804)
 
-Le génome d'Arabidopsis Thaliana est aussi récupéré à partir d'une [base de donnée](http://ftp.ebi.ac.uk/ensemblgenomes). Le génome est sous format TAIR, un format bed qui définit les région du génome (numéro du chromosome, start région, stop région)
+Le génome d'Arabidopsis Thaliana est aussi récupéré à partir d'une [base de donnée](https://plants.ensembl.org/info/data/ftp/index.html). Le génome est sous format TAIR, un format bed qui définit les région du génome (numéro du chromosome, start région, stop région)
 
 **Remarque sur les échantillons:**
 *Echantillon non publiés:*
@@ -99,6 +101,7 @@ Puis l'alignement à proprement parlé est réalisé avec la fonction bowtie2.
 **Remarque:** les alignements obtenus sont supérieurs à 90%.
 
 
+
 ## Sélection des reads du mapping - filtering.sh
 
 Après le mapping, on souhaite enlever tous les reads qui ne font pas parties des 10% bien mappés.
@@ -109,7 +112,7 @@ Puis, avec la fonction [samtools](http://samtools.sourceforge.net/), on enlève 
 
 
 
-## Quality
+## Mesure de la qualité de l'ATAC-seq - quality.sh
 
 
 
@@ -117,6 +120,107 @@ Puis, avec la fonction [samtools](http://samtools.sourceforge.net/), on enlève 
 
 
 
+
+
+cd ~/mydatalocal/NGS_epigenomics/data
+
+wget --user='tp_ngs' --password='Arabido2021!' https://flower.ens-lyon.fr/tp_ngs/arabidocontratac/Scripts/plot_tlen.R
+
+wget --user='tp_ngs' --password='Arabido2021!' https://flower.ens-lyon.fr/tp_ngs/arabidocontratac/Scripts/plot_tss_enrich.R
+
+%wget http://ftp.ebi.ac.uk/ensemblgenomes/pub/release-52/plants/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.52.gtf.gz
+
+%gunzip $cd/Arabidopsis_thaliana.TAIR10.52.gtf.gz
+
+
+TAIR=~/mydatalocal/NGS_epigenomics/data
+
+gtf=${TAIR}/Arabidopsis_thaliana.TAIR10.51.gtf
+# chromosome, gene/transcript/transposon, coordonées, gene_id, role_du_gene
+
+wget --user='tp_ngs' --password='Arabido2021!' https://flower.ens-lyon.fr/tp_ngs/arabidocontratac/Supporting_files/TAIR10_ChrLen.txt
+
+selected_regions=${TAIR}/TAIR10_selectedRegions.bed
+
+genome=${TAIR}/TAIR10_ChrLen.txt #info sur la longueur des chromosomes
+
+# Variables for TSS enrichment
+width=1000 #FENETRE AUTOUR DU tss
+flanks=100 #côté de la fenêtre ==> CACLUL COUVERTURE moyenne dans le génome
+
+# Variables for insert size distribution
+chrArabido=${TAIR}/TAIR10_ChrLen.bed
+grep -v -E "Mt|Pt" ${chrArabido} > ${TAIR}/TAIR10_ChrLen_1-5.bed
+# on enlève les chromosomes mitochondiraux et vhloroplastique
+#grep enlève toutes les ligens qui commence par Mt ou Pt
+#-v chercher Mt et Pt
+#-E exclure Mt et Pt
+chrArabido=${TAIR}/TAIR10_ChrLen_1-5.bed
+
+#////////////////////// Start of the script
+
+ID=2019_006_S6        # sample ID POUR L'INSTANT ON EN FAIT QU'UN ET ENSUITE ON FERA LES AUTRES
+bam_suffix=_Rsortedmarked_duplicate_filtered.bam #POUR L'INSTANT ON EN FAIT QU'UN ET ENSUITE ON FERA LES AUTRES
+
+mkdir -p ${TAIR}
+
+bam=~/mydatalocal/NGS_epigenomics/processed_data/duplicate/${ID}${bam_suffix}
+echo $bam
+samtools view ${bam} | head 
+
+# ------------------------------------------------------------------------------------------------------------ #
+# --------------------------- Compute TSS enrichment score based on TSS annotation --------------------------- #
+# ------------------------------------------------------------------------------------------------------------ #
+
+#1. Define genomic regions of interest
+
+
+#bedtools = manipulation de bam et bed
+
+echo "-------------------------- Define genomic regions of interest"
+grep -v "^[MtPt]" ${gtf} | awk '{ if ($3=="gene") print $0 }'  |\
+grep "protein_coding" |\
+awk ' BEGIN { FS=OFS="\t" } { split($9,a,";") ; match(a[1], /AT[0-9]G[0-9]+/) ; id=substr(a[1],RSTART,RLENGTH) ; if ($7=="+") print $1,$4,$4,id,$7 ; else print $1,$5,$5,id,$7 } ' |\
+uniq | bedtools slop -i stdin -g ${genome} -b ${width} > ${TAIR}/tss_${width}.bed
+
+#fichier tss: chromosmoe, start stop non du gène orientation
+
+bedtools intersect -u -a ${TAIR}/tss_${width}.bed -b ${selected_regions} > ${TAIR}/tmp.tss && mv ${TAIR}/tmp.tss ${TAIR}/tss_${width}.bed
+echo `cat ${TAIR}/tss_${width}.bed | wc -l` "roi defined from" ${gtf}
+
+tssFile=${TAIR}/tss_${width}.bed
+head ${tssFile}
+
+#2. Compute TSS enrichment
+echo "-------- Compute per-base coverage around TSS"
+
+
+sort -k1,1 -k2,2n ${tssFile} > ${tssFile/".bed"/".sorted.bed"}
+
+bedtools coverage -a ${tssFile/".bed"/".sorted.bed"} -b ${bam} -d -sorted > ${TAIR}/${ID}_tss_depth.txt
+awk -v w=${width} ' BEGIN { FS=OFS="\t" } { if ($5=="-") $6=(2*w)-$6+1 ; print $0 } ' ${TAIR}/${ID}_tss_depth.txt > ${TAIR}/${ID}_tss_depth.reoriented.txt
+
+sort -n -k 6 ${TAIR}/${ID}_tss_depth.reoriented.txt > ${TAIR}/${ID}_tss_depth.sorted.txt
+
+bedtools groupby -i ${TAIR}/${ID}_tss_depth.sorted.txt -g 6 -c 7 -o sum > ${TAIR}/${ID}_tss_depth_per_position.sorted.txt
+
+norm_factor=`awk -v w=${width} -v f=${flanks} '{ if ($6<f || $6>(2*w-f)) sum+=$7 } END { print sum/(2*f) } ' ${TAIR}/${ID}_tss_depth.sorted.txt`
+echo "Nf: " ${norm_factor}
+awk -v w=${width} -v f=${flanks} '{ if ($1>f && $1<(2*w-f)) print $0 }' ${TAIR}/${ID}_tss_depth_per_position.sorted.txt | awk -v nf=${norm_factor} -v w=${width} 'BEGIN { OFS="\t" } { $1=$1-w ; $2=$2/nf ; print $0 }' > ${TAIR}/${ID}_tss_depth_per_position.normalized.txt
+Rscript ${TAIR}/plot_tss_enrich.R -f ${TAIR}/${ID}_tss_depth_per_position.normalized.txt -w ${width} -o ${TAIR}  
+
+
+# ---------------------------------------------------------------------------------------- #
+# ------------------------------- Insert size distribution ------------------------------- #
+# ---------------------------------------------------------------------------------------- #
+
+echo "-------- Compute insert size distribution"
+samtools view -f 3 -F 16 -L ${chrArabido} -s 0.25 ${bam} | awk ' function abs(v){ return v < 0 ? -v : v } { print abs($9) } ' | sort -g | uniq -c | sort -k2 -g > ${TAIR}/${ID}_TLEN_1-5.txt
+Rscript ${TAIR}/plot_tlen.R -f ${TAIR}/${ID}_TLEN_1-5.txt -o ${TAIR}
+
+
+
+# End of the script \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
 
@@ -134,113 +238,22 @@ Technique de plus en plus utilisées mais pas super simple à analyser.
 outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
 et HMMRATAC spécialisé pour la taqSeq.
 
+bedtool_clothest
+
+IGV
+
+ontology
+
 
 # Conclusion Biologique
 
 
+
+
+
 # Perspective
 
+Coupler aux autres techniques de seq
 
+snare, rna, chip, ...
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#brouillon
-
-
-#Paek Calling = recherche de pique
-
-#Technique de plus en plus utilisées mais pas super simple à analyser.
-#outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
-#et HMMRATAC spécialisé pour la taqSeq.
-
-#vendredi présentation sur la TaqSeq BIBLIO
-#présenter le projet, ce qu'on à fait et ce qu'on va faire et tout ça de manière compréhensible
-
-#atac seq single cell ==> casiment pas de signal par cellule ==> obligé de faire des groupes de cellules qui ont à peu près la même identité.
-
-#atac ==> transposase qui vient couper des morcaux de minimum de 38pb à cause de l'encombrement stérique.
-#tac-seq ==> avantage par rapport au RNA seq pour connaître quels gènes sont actifs.
-
-#remarque : si 2 pique sur le GC mean ==> possibilité de contamination
-
-#Le séquençage est en paire d'ends pour séquencer les deux bruns de l'ADN et être plus précis dans le séquençage.
-
-#FastQ exlication du code
-#Chaque caractère donne la qualité du nucléotide. Plus un nucléotide est de bonne qualité, plus on est certain de sa nature.
-
-# @NB500892:406:H5F2WBGXG:1:11101:14655:1050 2:N:0:CGAGGCTG #ligne identifiant
-# NTTCGGAACTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN #ligne séquence N= nucléotide
-# +
-# #AAAAEEEEEE############################## #ligne qualité
-
-
-#nucleosome 148 pb autour
-
-#les facteurs de transcriptions peuvent aussi géner l'atac-seq ==> footprint qu'il faut recouper avec du chipseq contre le facteur de transcriptnio ou avec du RNAseq pour savoir quels zones sont constemment active et les différencier des zones inactives.
-
-fichier gtf
-AT = Arabidopsis Thaliana
-
-CDS = Coding Regions
-
-wc = nombre de caractère
-wc -l fichier = nombre de ligne du fichier
-wc --help pour les autres astuces
-
-
-#dossier TAIR = format bed = définit les régions du génome (numéro chromosome, start région, stop région)
-
-#fastqc lancer
-
-#Remarque:
-#006 et 007 et 372 = stem cell
-#374, 378 & 380 = racine antière
-#Article = réplicats de racine antière
-
-
-#duplicate read nombre = pas ouf si trop nombreux
-
-#sequece quality tout au vert
-
-#transposon =>  biai sur les 15 premières bases par rapport à la séquence reconnu pour couper
-
-#%GC = 44 à 45
-#ici on est autour de 48
-
-#N content faible ==> toute la séquence est determinée
-
-#si adapter content rouge il faut les supprimer avec un logiciel particulier, ici tout est au vert.
-
-#haute complexité c'est bien car les reads ont des starting point différent et donc s'overlap et permet une meilleur roncstruction du génome
-
-
-
-
-#trimming ==> enlève les séquences de mauvaises qualités, avec haut N content et avec du A tailing ou cen genre de chose
-
-#les duplicats sont enlevés avec autre chose
-
-#pour l'atac-seq ==> adaptater sont nextera
-
-
-
-#80% de mapping == bon allignement
-#=> si inférieur comprendre pourquoi, rapport avec la teechnique ou contamination
