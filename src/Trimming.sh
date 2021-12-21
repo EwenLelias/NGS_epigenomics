@@ -53,6 +53,8 @@ do
 	ILLUMINACLIP:${Nextera}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:25
 done
 
+# dans la suite, on analyse la qualité des données trimmés comme dans Quality_Analysis.sh
+
 cd ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed
 
 fastqc *.fast*

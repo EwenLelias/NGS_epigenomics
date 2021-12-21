@@ -4,16 +4,21 @@ workdir=~/mydatalocal/NGS_epigenomics/data/
 
 indexdir=~/mydatalocal/NGS_epigenomics/processed_data/index/
 
-mkdir -p $indexdir #creation dossier index
+mkdir -p $indexdir #creation fichier index
 
 bowtie2-build -f ~/mydatalocal/NGS_epigenomics/data/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz ${indexdir}TAIR10
+# bowtie 2 est un outil d'alignement de séquence.
+# bowtie2-build construit un index pour l'alignement
+
 
 gzip /home/rstudio/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/SRR400047*
+
 
 #for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/*1_paired.*
 # for each sample
   #do echo $fq
   #done
+# check avec m'écho que l'on renvoie quelque chose de cohérent
 for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/*1_paired.*  
   do
   suffixe=${fq%%1_paired.fastq.gz} # enlever suffix
@@ -29,7 +34,7 @@ for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/*1_paired.*
   done
 
 
-
+# on réalise l'allignement des séquences
 for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/article/*1_paired.fastq  
   do
   #echo $fq
@@ -46,7 +51,7 @@ for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/article/*1_p
 
 
 
-#zipper
+#pour les données zipper
 for fq in ~/mydatalocal/NGS_epigenomics/processed_data/Trim/trimmed/non_published/*1_paired.fastq.gz  
   do
   echo $fq

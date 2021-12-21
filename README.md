@@ -81,11 +81,35 @@ Lors du trimming, les séquences de mauvaises qualités, e.g. avec un N-content 
 La fonction utilisée pour le trimming est [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic).
 On trimme tous les échantillons. Seul un membre des deux paires d'ends est lu car la fonction trimming parcourt les deux bruns complémentaires en même temps.
 
-Les échantillons trimmés sont ensuite analysés avec fastqc et multiqc. Normalement, les échantillons trimmés sont de meilleurs qualités.
+Les échantillons trimmés sont ensuite analysés avec fastqc et multiqc. Les échantillons trimmés sont de meilleurs qualités.
 
 
 
-## Mapping du génome séquencé - Mapping.sh
+## Alignement des reads sur le génome - Mapping.sh
+
+Le mapping consiste à placer les reads sur un génome de référence.
+
+L'outil d'alignement de séquence utilisé est [bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml). Plus d'informations peuvent aussi être trouvé [ici](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#command-line-1).
+
+D'abord, un index est construit à partir du génome de référence avec la fonction bowtie2-build.
+
+Puis l'alignement à proprement parlé est réalisé avec la fonction bowtie2.
+
+**Remarque:** un alignement est considéré bon à partir de plus de 80% de mapping. Si le mapping est inférieur, il s'agit de comprendre pourquoi, si c'est en rapport avec la technique de séquençage, ou avec une potentielle contamination.
+**Remarque:** les alignements obtenus sont supérieurs à 90%.
+
+
+## Sélection des reads du mapping - filtering.sh
+
+Après le mapping, on souhaite enlever tous les reads qui ne font pas parties des 10% bien mappés.
+
+Dans un premier temps, on utilise la fonction [grep](https://www.quennec.fr/trucs-astuces/syst%C3%A8mes/gnulinux/programmation-shell-sous-gnulinux/les-commandes-filtres/visualisation-de-donn%C3%A9es/filtrage-de-lignes-grep) qui va répertorier les régions correspondant aux génomes mitochondriaux ou chloroplastiques. Ces régions sont ensuite supprimées.
+
+Puis, avec la fonction [samtools](http://samtools.sourceforge.net/), on enlève les reads dupliqués, les unpaired, les reads de mauvaise qualité, les reads non mappés et les régions blacklistés.
+
+
+
+## Quality
 
 
 
@@ -93,8 +117,44 @@ Les échantillons trimmés sont ensuite analysés avec fastqc et multiqc. Normal
 
 
 
-80% de mapping == bon allignement
-=> si inférieur comprendre pourquoi, rapport avec la teechnique ou contamination
+
+
+
+
+
+
+
+
+
+# Analyse des données
+
+Peak Calling = recherche de pique
+
+Technique de plus en plus utilisées mais pas super simple à analyser.
+outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
+et HMMRATAC spécialisé pour la taqSeq.
+
+
+# Conclusion Biologique
+
+
+# Perspective
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -105,14 +165,14 @@ Les échantillons trimmés sont ensuite analysés avec fastqc et multiqc. Normal
 #brouillon
 
 
-Paek Calling = recherche de pique
+#Paek Calling = recherche de pique
 
-Technique de plus en plus utilisées mais pas super simple à analyser.
-outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
-et HMMRATAC spécialisé pour la taqSeq.
+#Technique de plus en plus utilisées mais pas super simple à analyser.
+#outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
+#et HMMRATAC spécialisé pour la taqSeq.
 
-vendredi présentation sur la TaqSeq BIBLIO
-présenter le projet, ce qu'on à fait et ce qu'on va faire et tout ça de manière compréhensible
+#vendredi présentation sur la TaqSeq BIBLIO
+#présenter le projet, ce qu'on à fait et ce qu'on va faire et tout ça de manière compréhensible
 
 #atac seq single cell ==> casiment pas de signal par cellule ==> obligé de faire des groupes de cellules qui ont à peu près la même identité.
 
@@ -184,13 +244,3 @@ wc --help pour les autres astuces
 
 #80% de mapping == bon allignement
 #=> si inférieur comprendre pourquoi, rapport avec la teechnique ou contamination
-
-
-
-
-
-
-# Analyse des données
-
-
-# Conclusion biologique

@@ -7,6 +7,7 @@
 
 for mapfile in ~/mydatalocal/NGS_epigenomics/processed_data/mapping/*.bam
 
+# marquer es reads dupliqués
 do
   java -jar $PICARD MarkDuplicates \
         I=${mapfile} \
@@ -15,18 +16,19 @@ do
 done
 
 
-
+# enlever les régions correspondant au génome mitochondriaux ou chloroplastique
 grep -v -E "Mt|Pt" ~/mydatalocal/NGS_epigenomics/data/TAIR10_selectedRegions.bed > \
 ~/mydatalocal/NGS_epigenomics/data/TAIR10_selectedRegions_plus.bed
-# enlever les régions correspondant au génome mitochondriaux ou chloroplastique
+
 
 #samtool view -b -F 4 SRR4000472_sorted.bam > SRR4000472_sorted_mapped.bam
 
-#enlevez les dupliqués
 dir_selected=~/mydatalocal/NGS_epigenomics/processed_data/mapping #on crée des variables chemins d'accès
 workdir=~/mydatalocal/NGS_epigenomics/processed_data/duplicate
 TAIR=~/mydatalocal/NGS_epigenomics/data
 
+
+#enlevez les reads qu'on ne veut pas
 for f in $dir_selected/*duplicate.bam
 do
   file_name="$(basename -- $f)" #basename permet de récupérer le nom du fichier seulement
