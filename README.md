@@ -1,4 +1,9 @@
-# Contexte biologique
+# Next-Generation Sequencing Practical Work - Chromatin State of the Organizing Center of *A. thaliana* Root Meristem
+
+SIGNATURE
+
+
+## Contexte biologique
 
 Lors du développement de la racine d'Arabidopsis Thaliana, il y a une différentiation spatiale et temporelle de l'expression génétique des cellules.
 
@@ -21,11 +26,11 @@ A l'issue du mapping avec l'ATAC-seq, on obtient un footprint du génome. Cette 
 
 
 
-# Traitement des données de séquençage
+## Traitement des données de séquençage
 
 
 
-## Récupération des données - Get_Data.sh
+### Récupération des données - Get_Data.sh
 
 Utilisation de l'outil wget pour importer les données fastq de séquençage, racines entières et centres quiescents, non publiées à partir du serveur.
 
@@ -40,19 +45,18 @@ Le génome d'Arabidopsis Thaliana est aussi récupéré à partir d'une [base de
 *Echantillon non publiés:*  
 006 et 007 et 372 = stem cells  
 374, 378 & 380 = racines antières  
-
 *Echanitllon de l'article:* réplicats de racines antières
 
 
 
-## Analyse de la qualité du séquençage - Quality_Analysis.sh
+### Analyse de la qualité du séquençage - Quality_Analysis.sh
 
 Les séquences se présentent sous un format FastQ:
 
-@NB500892:406:H5F2WBGXG:1:11101:14655:1050 2:N:0:CGAGGCTG **ligne identifiant**  
+@NB500892:406:H5F2WBGXG:1:11101:14655:1050 2:N:0:CGAGGCTG **#ligne identifiant**  
  NTTCGGAACTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN **#ligne séquence N= nucléotide**  
   +  
- #AAAAEEEEEE############################## **ligne qualité**
+ #AAAAEEEEEE############################## **#ligne qualité**
 
 Chaque caractère donne la qualité du nucléotide. Plus un nucléotide est de bonne qualité, plus on est certain de sa nature. Un # signifie une piètre qualité. Ils sont associés au N, nucléotide dont on ne connaît pas la nature.
 
@@ -75,7 +79,7 @@ Reamrque:
 
 
 
-## Ellagage des données de séquençage - Trimming.sh
+### Ellagage des données de séquençage - Trimming.sh
 
 Lors du trimming, les séquences de mauvaises qualités, e.g. avec un N-content élevé, avec du A-tailing, etc., ainsi que les duplicats et les séquences d'adaptateurs sont enlevées.  
 **Remarque:** pour l'ATAC-seq, les adaptateurs sont nextera.
@@ -87,7 +91,7 @@ Les échantillons trimmés sont ensuite analysés avec fastqc et multiqc. Les é
 
 
 
-## Alignement des reads sur le génome - Mapping.sh
+### Alignement des reads sur le génome - Mapping.sh
 
 Le mapping consiste à placer les reads sur un génome de référence.
 
@@ -102,7 +106,7 @@ Puis l'alignement à proprement parlé est réalisé avec la fonction bowtie2.
 
 
 
-## Sélection des reads du mapping - filtering.sh
+### Sélection des reads du mapping - filtering.sh
 
 Après le mapping, on souhaite enlever tous les reads qui ne font pas parties des 10% bien mappés.
 
@@ -112,7 +116,7 @@ Puis, avec la fonction [samtools](http://samtools.sourceforge.net/), on enlève 
 
 
 
-## Mesure de la qualité de l'ATAC-seq - quality.sh
+### Mesure de la qualité de l'ATAC-seq - quality.sh
 
 A partir d'un génome d'Arabidopsis Thaliana complètement annoté (chromosome, gene/transcript/transposon, coordonées, gene_id, role_du_gene), l'étude est réalisé sur les fragments mappés et leurs tailles, distribution et position par rapport aux TSS (Transcription starting site).
 
@@ -130,9 +134,9 @@ La taille, la distirbution et la la périodicité des fragments dépend directem
 
 
 
-# Analyse des données
+## Analyse des données
 
-## Recherche des piques de reads sur le génome - Peak_Calling.sh
+### Recherche des piques de reads sur le génome - Peak_Calling.sh
 
 Peak Calling = recherche de pique
 
@@ -141,13 +145,23 @@ outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation S
 et HMMRATAC spécialisé pour la taqSeq.
 
 
-## Recherche des gènes les plus proches des piques - bedtool_clothest.sh
+### Recherche des gènes les plus proches des piques - bedtools_closest.sh
 
-bedtool_clothest
+Dans un premier temps, on reprend le fichier gtf (avec coordonnées, noms et orientations des gènes) que l'on filtre et trie pour ne garder que les **gènes** du **noyaux**.
+
+Puis vient la recherche du positionnement des piques dans ce gènome épuré à l'aide de l'outil [bedtools closest](https://bedtools.readthedocs.io/en/latest/content/tools/closest.html).
+
+bedtools closest permet de connaître le plus proche gène qui n'est pas overlapant avec un pique de reads. Cela peut donner une idée des gènes et régions régulatrices qui sont accessibles aux facteurs de transcriptions et polymerases pour l'expression du gène. 
+
+Puis l'utilisation de bedtools intersect permet de sélectionner les gènes uniquement exprimés par les cellules quiescentes et donc de s'intéresser aux gènes qui donnent potentiellement leur caractères quiescents et cellules souches à ce petit pool de 2-5 cellules.
 
 
 
-# Conclusion Biologique
+
+## Conclusion Biologique
+
+A l'issue de l'analyse informatique, on obtient une sélection de gènes. Ces gènes sont caractérisés pour être proche des régions qui ne sont accessibles que dans le génome des cellules du centre quiescent d'*A. thaliana*.
+
 
 IGV
 
@@ -156,7 +170,7 @@ ontology
 
 
 
-# Perspective
+##  Perspective
 
 Coupler aux autres techniques de seq
 
