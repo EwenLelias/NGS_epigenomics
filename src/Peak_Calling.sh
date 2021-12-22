@@ -1,3 +1,5 @@
+#Recherche de piques de reads sur le génome
+
 DIR=~/mydatalocal/NGS_epigenomics/processed_data/duplicate
 outDIR=~/mydatalocal/NGS_epigenomics/processed_data/Peak
 
@@ -38,7 +40,7 @@ for f in ${DIR}/*filtered.bam
 do
   samtools index $f
 done
-
+#on indexe les régions ou se situe les piques
 #https://bedtools.readthedocs.io/en/latest/content/tools/closest.html
 
 

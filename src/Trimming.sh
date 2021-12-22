@@ -1,3 +1,5 @@
+#Trimming des données de séquençage
+
 ls /softwares/Trimmomatic-0.39/
 #vérifie que trimmomatic-0.39.jar est dans son dossier
 

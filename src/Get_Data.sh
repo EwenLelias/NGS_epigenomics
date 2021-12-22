@@ -1,3 +1,5 @@
+#recherche des données
+
 cd ~/mydatalocal/NGS_epigenomics/data/
 #on se place dans le fichier data à l'aide de cd
 

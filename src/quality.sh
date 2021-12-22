@@ -1,3 +1,5 @@
+# Analyse de la qualité de l'ATAC-seq
+
 cd ~/mydatalocal/NGS_epigenomics/data
 
 wget --user='tp_ngs' --password='Arabido2021!' https://flower.ens-lyon.fr/tp_ngs/arabidocontratac/Scripts/plot_tlen.R

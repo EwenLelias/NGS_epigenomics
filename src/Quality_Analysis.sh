@@ -1,3 +1,4 @@
+# Analyse de la qualité du séquençage
 
 cd ~/mydatalocal/NGS-epigenomics/data/ #on se place dans le folder data
 

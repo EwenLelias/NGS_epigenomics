@@ -1,3 +1,5 @@
+#Filtrage des régions mappées
+
 # enlever le génome non chromosomiique
 # reads qui ont pas mapper
 # reads de mauvaise qualité

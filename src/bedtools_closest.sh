@@ -1,3 +1,5 @@
+# repérage des gènes proches des régions riches en reads
+
 DIR=~/mydatalocal/NGS_epigenomics/data/
 outDIR=~/mydatalocal/NGS_epigenomics/processed_data/Peak
 

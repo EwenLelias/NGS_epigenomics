@@ -1,3 +1,5 @@
+# Mapping des reads sur le génome
+
 # construction d'un index à partir d'un génome de référence
 
 workdir=~/mydatalocal/NGS_epigenomics/data/
