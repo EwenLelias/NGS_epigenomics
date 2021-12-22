@@ -6,5 +6,4 @@
 data/*
 processed_data/*
 results/*
-.src/atac_qc.sh
-.src/annoted_peak.R
+
