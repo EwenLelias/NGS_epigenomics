@@ -36,10 +36,11 @@ Les SRA sont données dans les liens suivants:
 
 Le génome d'Arabidopsis Thaliana est aussi récupéré à partir d'une [base de donnée](https://plants.ensembl.org/info/data/ftp/index.html). Le génome est sous format TAIR, un format bed qui définit les région du génome (numéro du chromosome, start région, stop région)
 
-**Remarque sur les échantillons:**
-*Echantillon non publiés:*
-006 et 007 et 372 = stem cells
-374, 378 & 380 = racines antières
+**Remarque sur les échantillons:**  
+*Echantillon non publiés:*  
+006 et 007 et 372 = stem cells  
+374, 378 & 380 = racines antières  
+
 *Echanitllon de l'article:* réplicats de racines antières
 
 
@@ -48,9 +49,9 @@ Le génome d'Arabidopsis Thaliana est aussi récupéré à partir d'une [base de
 
 Les séquences se présentent sous un format FastQ:
 
-@NB500892:406:H5F2WBGXG:1:11101:14655:1050 2:N:0:CGAGGCTG **ligne identifiant**
- NTTCGGAACTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN **#ligne séquence N= nucléotide**
- +
+@NB500892:406:H5F2WBGXG:1:11101:14655:1050 2:N:0:CGAGGCTG **ligne identifiant**  
+ NTTCGGAACTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN **#ligne séquence N= nucléotide**  
+  +  
  #AAAAEEEEEE############################## **ligne qualité**
 
 Chaque caractère donne la qualité du nucléotide. Plus un nucléotide est de bonne qualité, plus on est certain de sa nature. Un # signifie une piètre qualité. Ils sont associés au N, nucléotide dont on ne connaît pas la nature.
@@ -67,16 +68,16 @@ Parmis ces panels, on a notamment:
 
 **Remarque:** on peut définir la complexité d'un séquençage en fonction du nombre de starting point des reads. Plus elle est élevée, plus les reads vont avoir des starting points différents et onc plus il y aura d'overlap, ce qui permettra une meilleur reconstruction du génome.
 
-Reamrque:
-%GC content global AT = 36%
-%GC content gene AT = 44-45%
-%GC content measured = 48%
+Reamrque:  
+%GC content global AT = 36%  
+%GC content gene AT = 44-45%  
+%GC content measured = 48%  
 
 
 
 ## Ellagage des données de séquençage - Trimming.sh
 
-Lors du trimming, les séquences de mauvaises qualités, e.g. avec un N-content élevé, avec du A-tailing, etc., ainsi que les duplicats et les séquences d'adaptateurs sont enlevées.
+Lors du trimming, les séquences de mauvaises qualités, e.g. avec un N-content élevé, avec du A-tailing, etc., ainsi que les duplicats et les séquences d'adaptateurs sont enlevées.  
 **Remarque:** pour l'ATAC-seq, les adaptateurs sont nextera.
 
 La fonction utilisée pour le trimming est [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic).
@@ -96,7 +97,7 @@ D'abord, un index est construit à partir du génome de référence avec la fonc
 
 Puis l'alignement à proprement parlé est réalisé avec la fonction bowtie2.
 
-**Remarque:** un alignement est considéré bon à partir de plus de 80% de mapping. Si le mapping est inférieur, il s'agit de comprendre pourquoi, si c'est en rapport avec la technique de séquençage, ou avec une potentielle contamination.
+**Remarque:** un alignement est considéré bon à partir de plus de 80% de mapping. Si le mapping est inférieur, il s'agit de comprendre pourquoi, si c'est en rapport avec la technique de séquençage, ou avec une potentielle contamination.  
 **Remarque:** les alignements obtenus sont supérieurs à 90%.
 
 
@@ -131,7 +132,7 @@ La taille, la distirbution et la la périodicité des fragments dépend directem
 
 # Analyse des données
 
-## Peak Calling
+## Recherche des piques de reads sur le génome - Peak_Calling.sh
 
 Peak Calling = recherche de pique
 
@@ -139,15 +140,18 @@ Technique de plus en plus utilisées mais pas super simple à analyser.
 outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
 et HMMRATAC spécialisé pour la taqSeq.
 
+
+## Recherche des gènes les plus proches des piques - bedtool_clothest.sh
+
 bedtool_clothest
 
-IGV
-
-ontology
 
 
 # Conclusion Biologique
 
+IGV
+
+ontology
 
 
 
