@@ -144,6 +144,10 @@ Technique de plus en plus utilisées mais pas super simple à analyser.
 outil utilisé MACS2 davantage pour le chipSeq (chromatideImmunoprécipitation Sequencing ==> anticorps anti histone par exemple)
 et HMMRATAC spécialisé pour la taqSeq.
 
+1- Nombre de coupure par la transposase suit une loi de Poisson
+2- Il y a beaucoup de bruit, on mesure donc un nombre moyen d'occurrence pour le background
+3- On fixe une fenêtre de temps puis on calcule le nombre moyen d'occurrence local sur tout le génome, on le compare ensuite avec le nombre moyen d'occurrence 
+
 
 ### Recherche des gènes les plus proches des piques - bedtools_closest.sh
 
@@ -158,21 +162,29 @@ Puis l'utilisation de bedtools intersect permet de sélectionner les gènes uniq
 
 
 
+#quantification des insertions a.n de promoteurs: compter nb insertions a.n TSS // comparer accessibilité TSS et expression (read count data)
+
+#bedtools intersect des données de pics racine et centre quiescent: on fait intersect, ça enlève tous les pics qui s’overlap entre les fichiers, et on regarde les pics différents 
+
+
+
+
 ## Conclusion Biologique
 
 A l'issue de l'analyse informatique, on obtient une sélection de gènes. Ces gènes sont caractérisés pour être proche des régions qui ne sont accessibles que dans le génome des cellules du centre quiescent d'*A. thaliana*.
 
+Cette sélection peut être analysé avec l'outil [Integrative Genomic Viewer (IGV)](https://software.broadinstitute.org/software/igv/). Cette outil permet de bien visualiser les régions accessibles et de regarder l'orientation des gènes et la position des TSS par rapport aux piques.
 
-IGV
-
-ontology
+Un autre outil très utile est [The Gene Ontology Ressource](http://geneontology.org/) qui permet de connaître la fonction des gènes de la sélection. Notamment, on peut voir si certaines fonction particulières se dégagent de la sélection.  
+**Remarque:** L'un des gènes de la selection est impliqué dans la répression de la différentiation cellulaire.
 
 
 
 
 ##  Perspective
 
-Coupler aux autres techniques de seq
+L'ATAC-seq est une méthode exhaustive pour l'analyse de l'accessibilité du génome et donc de l'épigénome.  
+Cependant, l'accessibilité et l'expression des gènes sont deux choses différentes. De plus, la nature des facteurs de transcriptions positionés sur le génome n'est pas connu grçace à cette méthode. L'utilisation de méthodes complémentaires comme le [RNA-seq]() et le [ChIp-seq]() respectivement permettrait une analyse plus détaillée de l'épigénome, de son expression et de ce qui rend les cellules quiescentes uniques.  
+Une autre méthode intéressante et prometteuse est le [SNARE-seq]() qui allie les avantages du RNA-seq et de l'ATAC-seq au niveau single-cell.
 
-snare, rna, chip, ...
 
